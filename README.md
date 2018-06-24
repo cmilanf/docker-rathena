@@ -12,6 +12,7 @@ This repository is a Docker build of [rAthena](https://github.com/rathena/rathen
     * Login-Server, Char-Server and Map-Server are part of the same container. It would be a good practice to build three separated containers for each one, but rAthena only offers limited scalability in Map-Server. Whatever to leave AS IS or build a new repo with each server in different containers is something to be studied in the future.
 
 This Docker image was developed for the call for speakers of the [Global Azure Bootcamp 2018 - Madrid](http://azurebootcamp.es) and you can view the session recording (Spanish only):
+
 [![GAB 2018 - Track 1 - Modo Dios en un MMORPG sobre AKS y la ciudad de los 200 bots](https://img.youtube.com/vi/ZBDJImdmiUo/0.jpg)](https://www.youtube.com/watch?v=ZBDJImdmiUo)
 
 Even if this Docker build was developed for that session, it is focused at [Kubernetes](https://kubernetes.io) and container orchestration in [Azure Kubernetes Service](https://azure.microsoft.com/es-es/services/kubernetes-service/).
@@ -69,7 +70,9 @@ SET_CHAR_PUBLIC_IP and SET_MAP_PUBLIC_IP speak by themselves, you just put here 
 ## Usage
 If you have a readily accesible MySQL sever, then usage is straight forward:
 
-`docker run -d -p 6900:6900 -p 6121:6121 -p 5121:5121 --restart=unless-stopped -e MYSQL_HOST="MYSQL host IP" -e MYSQL_USER="MySQL username" -e MYSQL_PWD="MySQL password" -e MYSQL_DB="rAthena" -e ADD_SUBNET_MAP1="255.255.0.0:10.0.0.3:10.0.0.3" -e SET_CHAR_PUBLIC_IP="52.232.25.13" -e SET_MAP_PUBLIC_IP="52.232.25.13" -MYSQL_ACCOUNTSANDCHARS="1" -e SET_SERVER_NAME="My dockerized rAthena server"`
+```
+docker run -d -p 6900:6900 -p 6121:6121 -p 5121:5121 --restart=unless-stopped -e MYSQL_HOST="MYSQL host IP" -e MYSQL_USER="MySQL username" -e MYSQL_PWD="MySQL password" -e MYSQL_DB="rAthena" -e ADD_SUBNET_MAP1="255.255.0.0:10.0.0.3:10.0.0.3" -e SET_CHAR_PUBLIC_IP="52.232.25.13" -e SET_MAP_PUBLIC_IP="52.232.25.13" -MYSQL_ACCOUNTSANDCHARS="1" -e SET_SERVER_NAME="My dockerized rAthena server"
+```
 
 ## Related projects:
 
