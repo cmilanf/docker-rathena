@@ -71,7 +71,7 @@ SET_CHAR_PUBLIC_IP and SET_MAP_PUBLIC_IP speak by themselves, you just put here 
 If you have a readily accesible MySQL sever, then usage is straight forward:
 
 ```
-docker run -d -p 6900:6900 -p 6121:6121 -p 5121:5121 --restart=unless-stopped -e MYSQL_HOST="MYSQL host IP" -e MYSQL_USER="MySQL username" -e MYSQL_PWD="MySQL password" -e MYSQL_DB="rAthena" -e ADD_SUBNET_MAP1="255.255.0.0:10.0.0.3:10.0.0.3" -e SET_CHAR_PUBLIC_IP="52.232.25.13" -e SET_MAP_PUBLIC_IP="52.232.25.13" -MYSQL_ACCOUNTSANDCHARS="1" -e SET_SERVER_NAME="My dockerized rAthena server"
+docker run -d -p 6900:6900 -p 6121:6121 -p 5121:5121 --restart=unless-stopped --name rathena -e MYSQL_HOST="MYSQL host IP" -e MYSQL_USER="MySQL username" -e MYSQL_PWD="MySQL password" -e MYSQL_DB="rAthena" -e ADD_SUBNET_MAP1="255.255.0.0:10.0.0.3:10.0.0.3" -e SET_CHAR_PUBLIC_IP="52.232.25.13" -e SET_MAP_PUBLIC_IP="52.232.25.13" -MYSQL_ACCOUNTSANDCHARS="1" -e SET_SERVER_NAME="My dockerized rAthena server" cmilanf/docker-rathena:latest
 ```
 
 ## Related projects:
