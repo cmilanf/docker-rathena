@@ -902,7 +902,7 @@ END //
 
 DELIMITER ;
 
--- ###### ACCOUNTS ######
+-- ###### CREATE ALL ######
 CALL cleanDatabase();
 CALL createGmAccountsAndChars();
 CALL createBotAccounts(5000);
