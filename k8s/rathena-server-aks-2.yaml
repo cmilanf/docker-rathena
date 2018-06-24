@@ -1,0 +1,74 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2, before 1.8.0 use apps/v1beta1
+kind: Deployment
+metadata:
+  name: rathena-server
+  labels:
+    app: rathena
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rathena
+      component: server
+      version: v1.0
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: rathena
+        component: server
+        version: v1.0
+    spec:
+      containers:
+      - image: cmilanf/rathena:latest
+        imagePullPolicy: Always
+        name: rathena-server
+        env:
+        - name: MYSQL_PWD
+          valueFrom:
+            secretKeyRef:
+              name: rathena-server-pwd
+              key: mysql-pwd
+        - name: SET_INTERSRV_PASSWD
+          valueFrom:
+            secretKeyRef:
+              name: rathena-server-pwd
+              key: intersrv-passwd
+        - name: MYSQL_HOST
+          value: "10.0.0.2"
+        - name: MYSQL_USER
+          value: "root"
+        - name: MYSQL_DB
+          value: "rathena"
+        - name: SET_SERVER_NAME
+          value: "rAthena"
+        - name: SET_INTERSRV_USERID
+          value: "user1"
+        - name: MYSQL_DROP_DB
+          value: "1"
+        - name: SET_PINCODE_ENABLED
+          value: "no"
+        - name: SET_START_POINT
+          value: "prontera,155,182"
+        - name: SET_ARROW_DECREMENT
+          value: "0"
+        - name: ADD_SUBNET_MAP1
+          value: "255.255.0.0:10.0.0.3:10.0.0.3"
+        - name: SET_CHAR_PUBLIC_IP
+          value: "52.232.25.13"
+        - name: SET_MAP_PUBLIC_IP
+          value: "52.232.25.13"
+        - name: MYSQL_ACCOUNTSANDCHARS
+          value: "1"
+        ports:
+        - containerPort: 6900
+          name: login-server
+        - containerPort: 5121
+          name: map-server
+        - containerPort: 6121
+          name: char-server
+        resources:
+          requests:
+            memory: "4096Mi"
+            cpu: "2"

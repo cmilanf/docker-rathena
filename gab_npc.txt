@@ -1,0 +1,75 @@
+//===== rAthena Script =======================================
+//= Global Azure Bootcamp 2018 script
+//===== By: ==================================================
+//= Carlos Milán Figueredo
+//===== Current Version: =====================================
+//= 1.0
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Summons monsters for fighting with openkore bots
+//===== Additional Comments: =================================
+//=
+//============================================================
+gef_fild07,322,193,3	script	Valeria	71,{
+	mes "[Valeria]";
+	mes "Esto es la ^0000FFGlobal Azure Bootcamp 2018^000000";
+	mes "^990000UN SALUDO A TODOS LOS ASISTENTES^000000";
+	next;
+	mes "[Valeria]";
+	mes "Con el poder de ^990000Azure Kubernetes Service^000000,";
+	mes "^0000FFDocker^000000, y ^0000FFKubernetes^000000";
+	mes "podreis vencer a los monstruos.";
+	next;
+	mes "Confio en vosotros...";
+	menu "Estamos preparados",START,"Mejor nos lo pensamos un poco",WAIT;
+
+	START:
+	//*areamonster "<map name>",<x1>,<y1>,<x2>,<y2>,"<name to show>",<mob id>,<amount>{,"<event label>"};
+	areamonster "gef_fild07",91,165,220,206,"Myst Case",1249,60;
+	areamonster "gef_fild07",91,165,220,206,"Knight of Abyss",1219,20;
+	areamonster "gef_fild07",91,165,220,206,"Moonlight",1150,10;
+	areamonster "gef_fild07",91,165,220,206,"Doppelganger",1046,3;
+	areamonster "gef_fild07",91,165,220,206,"Sasquatch",1243,66;
+	areamonster "gef_fild07",91,165,220,206,"Venomous",1621,66;
+	areamonster "gef_fild07",91,165,220,206,"Baphomet Jr.",1101,30;
+	areamonster "gef_fild07",91,165,220,206,"Angeling",1096,20;
+	areamonster "gef_fild07",91,165,220,206,"Eclipse",1093,30;
+	areamonster "gef_fild07",91,165,220,206,"Loli Ruri",1505,40;
+	areamonster "gef_fild07",91,165,220,206,"Garm",1252,3;
+	areamonster "gef_fild07",91,165,220,206,"Playero",1313,80;
+	areamonster "gef_fild07",91,165,220,206,"MELTDOWN HACKED CPU",3252,40;
+	areamonster "gef_fild07",91,165,220,206,"SPECTRE HACKED CPU",3252,40;
+	close;
+
+	WAIT:
+	close;
+}
+
+//Script by MrVandalBus
+gef_fild07,325,187,3	script	mapheal#1::mapheal	-1,10,20,{
+	OnTouch:
+		//sc_start SC_ASPDPOTION2,360000,0;
+		//sc_start SC_STRFood,360000,10;
+		//sc_start SC_AGIFood,360000,10;
+		//sc_start SC_VITFood,360000,10;
+		//sc_start SC_INTFood,360000,10;
+		//sc_start SC_DEXFood,360000,10;
+		//sc_start SC_LUKFood,360000,10;
+		//sc_start SC_HitFood,1200000,30;
+		//sc_start SC_FleeFood,1200000,30;
+		//sc_start SC_BATKFood,1200000,10;
+		//sc_start SC_MATKFood,120000,10;
+		//skilleffect 383,0; sc_start SC_WINDWALK,360000,5;
+		//skilleffect 74,0; sc_start SC_MAGNIFICAT,360000,5;
+		//skilleffect 75,0; sc_start SC_GLORIA,360000,5;
+		//skilleffect 29,0; sc_start SC_INCREASEAGI,360000,10;
+		percentheal 100,100;
+}
+// other town duplicates
+morocc,156,93,0	duplicate(mapheal)	mapheal#2	-1,2,2
+geffen,119,59,0	duplicate(mapheal)	mapheal#3	-1,2,2
+payon,162,233,0	duplicate(mapheal)	mapheal#4	-1,2,2
+izlude,128,114,0	duplicate(mapheal)	mapheal#5	-1,2,2
+aldebaran,140,131,0	duplicate(mapheal)	mapheal#6	-1,2,2
+prontera,156,191,0	duplicate(mapheal)	mapheal#7	-1,2,2

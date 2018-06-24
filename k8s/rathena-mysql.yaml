@@ -1,0 +1,100 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-pwd
+type: Opaque
+data:
+  password: cDRzc0B3MHJkCg== # p4ss@w0rd in base64
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rathena-mysql
+  labels:
+    app: rathena
+spec:
+  ports:
+    - protocol: TCP
+      port: 3306
+      nodePort: 32336 # 30000-32767
+      name: mysql
+  selector:
+    app: rathena
+    component: mysql
+    version: v1.0
+  clusterIP: 10.96.0.2 # Default range: 10.96.0.0/12
+  type: NodePort
+---
+# This is workaround for https://github.com/docker/for-win/issues/1669#event-1492987545
+# Please, note this is also a BAD practice: PersistentVolume shouldn't be never in the same
+# definition as PersistentVolumeClaim, as the first one is part of Cluster configuration,
+# governed by IT
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv
+  labels:
+    app: rathena
+spec:
+  storageClassName: hostpath
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/tmp/mysql-volume1/"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+  labels:
+    app: rathena
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2, before 1.8.0 use apps/v1beta1
+kind: Deployment
+metadata:
+  name: rathena-mysql
+  labels:
+    app: rathena
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rathena
+      component: mysql
+      version: v1.0
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: rathena
+        component: mysql
+        version: v1.0
+    spec:
+      containers:
+      - image: mysql:5.7
+        name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-pwd
+              key: password
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: rathena-mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: rathena-mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim
