@@ -43,8 +43,8 @@ RUN mkdir -p /opt/rAthena \
     && apk add --no-cache git make gcc g++ mariadb-dev mariadb-client-libs zlib-dev pcre-dev libressl-dev pcre libstdc++ nano dos2unix mysql-client bind-tools \
     && git clone https://github.com/rathena/rathena.git /opt/rAthena \
     && cd /opt/rAthena \
-    && if [ ${PACKET_OBFUSCATION} -neq 1 ]; then sed -i "s|#define PACKET_OBFUSCATION|//#define PACKET_OBFUSCATION|g" /opt/rAthena/src/config/packets.h; fi \
-    && if [ ${PACKET_OBFUSCATION} -neq 1 ]; then sed -i "s|#define PACKET_OBFUSCATION_WARN|//#define PACKET_OBFUSCATION_WARN|g" /opt/rAthena/src/config/packets.h; fi \
+    && if [ ${PACKET_OBFUSCATION} -neq 1 ]; then sed -i "s|#define PACKET_OBFUSCATION|//#define PACKET_OBFUSCATION|g" /opt/rAthena/src/config/packets.hpp; fi \
+    && if [ ${PACKET_OBFUSCATION} -neq 1 ]; then sed -i "s|#define PACKET_OBFUSCATION_WARN|//#define PACKET_OBFUSCATION_WARN|g" /opt/rAthena/src/config/packets.hpp; fi \
     && ./configure --enable-packetver=${PACKETVER} \
     && make clean \
     && make server \
