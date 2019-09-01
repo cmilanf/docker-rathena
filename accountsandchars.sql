@@ -1,24 +1,3 @@
--- #################################################
--- #  rAthena Global Azure Bootcamp 2018 demo SQL  #
--- #################################################
--- # DESCRIPTION: This SQL script populates a newly created rAthena database with 5000 OpenKore-ready bot accounts,
--- # as well as, two accounts for the Global Azure Bootcamp 2018 demo Game Master: Karloch and Almarc. These accounts are 
--- # hardcoded but it is fairly simple to modify them to your needs.
--- #
--- # The script provides the following:
--- #   * Existing value cleaning
--- #   * 5000 bots account creation, randomized between Male and Female gender
--- #   * 5000 characters for each account created, also with random gender
--- #   * Random class and stats assignement for every account
--- #   * Item assignement for the characters depending on their class
--- #   * Full skill tree availability for each character in the class
--- #   * GM account and characters creation
--- # 
--- # This script is also really useful as base if you want to start your own server with populated accounts. 
--- #
--- # PD: The script is quick-and-dirty, lacking any best practices. This is NOT intended to be MySQL example of
--- # good doing.
--- #
 USE rathena;
 -- ###### PROCEDURES AND FUNCTIONS ######
 DROP FUNCTION IF EXISTS getRandomSex;
@@ -47,7 +26,7 @@ BEGIN
     DECLARE i INT DEFAULT 0;
     WHILE i < numBots DO
         INSERT INTO `login` (userid,user_pass,sex,email,group_id,last_ip,character_slots,pincode)
-            VALUES (CONCAT('botijo',i),'p4ss@w0rd',getRandomSex(),CONCAT('botijo',i,'@azurebootcamp.es'),0,'0.0.0.0',9,'');
+            VALUES (CONCAT('botijo',i),'Melon.77',getRandomSex(),CONCAT('botijo',i,'@azurebootcamp.es'),0,'0.0.0.0',9,'');
         SET i = i + 1;
     END WHILE;
 END //
@@ -220,7 +199,6 @@ BEGIN
     
     OPEN cur;
     charPopulateLoop: LOOP
-        SET i=i+1;
 		FETCH cur INTO cur_account_id,cur_sex;
         IF done THEN
 			CLOSE cur;
@@ -236,6 +214,7 @@ BEGIN
 			VALUES (cur_account_id, 1, CONCAT('botijo', i), cur_sex, class, @base_level, 50, 0, 0, @zeny, @str,
 			@agi, @vit, @`int`, @dex, @luk, @max_hp, @max_hp, @max_sp, @max_sp, @hair, @hair_color, @clothes_color, 0, 0, 0,
 			0, 0, 0, 0, map_name, @x, @y, map_name, @x, @y);
+		SET i=i+1;
 	END LOOP charPopulateLoop;
 END //
 
@@ -287,7 +266,7 @@ BEGIN
 	DECLARE almarc_class SMALLINT(6) DEFAULT 9;
     
     CALL getRandomLocation ('gef_fild07', @x, @y);
-	INSERT IGNORE INTO `login` (userid,user_pass,sex,email,group_id,last_ip,character_slots,pincode) VALUES ('Karloch','p4ss@w0rd','M','carlos.milan@azurebootcamp.es',99,'0.0.0.0',9,'');
+	INSERT IGNORE INTO `login` (userid,user_pass,sex,email,group_id,last_ip,character_slots,pincode) VALUES ('Karloch','Melon.77','M','cmilanf@hispamsx.org',99,'0.0.0.0',9,'');
     SELECT account_id,userid,sex INTO @account_id,@userid,@sex FROM `login` WHERE userid='Karloch';
     CALL getGmStats(karloch_class, @userid, @base_level, @zeny, @str, @agi, @vit, @`int`, @dex, @luk, @max_hp, @max_sp,
 			@hair, @hair_color, @clothes_color, @body, @weapon, @shield, @head_top, @head_mid, @head_bottom, @robe);
@@ -298,7 +277,7 @@ BEGIN
 		@agi, @vit, @`int`, @dex, @luk, @max_hp, @max_hp, @max_sp, @max_sp, @hair, @hair_color, @clothes_color, 0, 0, 0,
 		0, 0, 0, 0, map_name, @x, @y, map_name, @x, @y);
     
-	INSERT IGNORE INTO `login` (userid,user_pass,sex,email,group_id,last_ip,character_slots,pincode) VALUES ('Almarc','p4ss@w0rd','M','alberto.marcosg@azurebootcamp.es',99,'0.0.0.0',9,'');
+	INSERT IGNORE INTO `login` (userid,user_pass,sex,email,group_id,last_ip,character_slots,pincode) VALUES ('Almarc','Melon.77','M','alberto.marcosg@outlook.com',99,'0.0.0.0',9,'');
     SELECT account_id,userid,sex INTO @account_id,@userid,@sex FROM `login` WHERE userid='Almarc';
     CALL getGmStats(almarc_class, @userid, @base_level, @zeny, @str, @agi, @vit, @`int`, @dex, @luk, @max_hp, @max_sp,
 			@hair, @hair_color, @clothes_color, @body, @weapon, @shield, @head_top, @head_mid, @head_bottom, @robe);
@@ -900,13 +879,35 @@ BEGIN
     DELETE FROM `login` WHERE account_id != 1;
 END //
 
-DELIMITER ;
+CREATE PROCEDURE createCustomCharOnlineLockTable()
+BEGIN
+	CREATE TABLE custom_char_online_lock (
+    	`name` varchar(30) NOT NULL DEFAULT '',
+    	`online` tinyint(2) NOT NULL default '0'
+	) ENGINE=MyISAM;
 
--- ###### CREATE ALL ######
+	INSERT INTO custom_char_online_lock (`name`)
+	SELECT `name`
+	FROM `char`
+	WHERE `name` LIKE 'botijo%';
+END //
+
+-- ###### ACCOUNTS ######
 CALL cleanDatabase();
 CALL createGmAccountsAndChars();
 CALL createBotAccounts(5000);
 CALL createBotChars();
 CALL createItemsForChars();
 CALL createSkillsForChars();
-SET GLOBAL max_connections = 1024;
+CALL createCustomCharOnlineLockTable();
+SET GLOBAL max_connections = 2048;
+SET GLOBAL event_scheduler = ON;
+
+CREATE EVENT online_status_sync
+ON SCHEDULE EVERY 5 MINUTE
+STARTS CURRENT_TIMESTAMP + INTERVAL 5 MINUTE
+COMMENT 'Online char status sync to custom_char_online_lock table'
+DO
+	UPDATE `char` src, custom_char_online_lock dst
+	SET dst.online = src.online
+	WHERE src.name = dst.name;
