@@ -19,12 +19,12 @@ Even if this Docker build was developed for that session, it is focused at [Kube
 
 ## File description
 
-  * **k8s/**. Kubernetes YAML files to deploy the service in on-premises development environment, AKS and Rancher 2.x.
-  * **tools/**. Some small Windows batch scripts for automating some operations as ACR permissions for AKS cluster.
-  * **accountsandchars.sql**. MySQL script that creates 2 GM accounts and 5000 bot accounts for use with [OpenKore](http://openkore.com). It creates accounts, characters, items and skills.
-  * **Dockerfile**. The core of this repo, documented with the LABEL entries.
-  * **docker-entrypoint.sh**. The Docker entrypoint that leaves the container in the desired state for execution.
-  * **gab_npc.txt**. A sample rAthena script for invoking monsters fought in Global Azure Bootcamp session.
+  * `k8s/`. Kubernetes YAML files to deploy the service in on-premises development environment, AKS and Rancher 2.x.
+  * `tools/`. Some small Windows batch scripts for automating some operations as ACR permissions for AKS cluster.
+  * `accountsandchars.sql`. MySQL script that creates 2 GM accounts and 5000 bot accounts for use with [OpenKore](http://openkore.com). It creates accounts, characters, items and skills.
+  * `Dockerfile`. The core of this repo, documented with the LABEL entries.
+  * `docker-entrypoint.sh`. The Docker entrypoint that leaves the container in the desired state for execution.
+  * `gab_npc.txt`. A sample rAthena script for invoking monsters fought in Global Azure Bootcamp session.
 
 ## Requeriments
 The only pre-requisites this image has in an existing MySQL database server, with version 5.7 preferred.
@@ -34,38 +34,38 @@ Alpine Linux and rAthena footprints are fairly small and you can run your server
 
 ## Environment variables accepted by the image
 
-  * DOWNLOAD_OVERRIDE_CONF_URL. If defined, it will download a ZIP file with the import configuration overrides. If this is the case, no environment variables applies.
-  * **MYSQL_HOST**. Hostname of the MySQL database. Ex: calnus-beta.mysql.database.azure.com
-  * **MYSQL_DB**. Name of the MySQL database.
-  * **MYSQL_USER**. Database username for authentication.
-  * **MYSQL_PWD**. Password for authenticating with database.
-  * MYSQL_ACCOUNTSANDCHARS. To whatever to execute the accountsandchars.sql so GM and bot accounts get precreated in the database.
-  * SET_CHAR_TO_LOGIN_IP. IP that CHAR server uses to connect to LOGIN.
-  * SET_MAP_TO_CHAR_IP. IP that MAP server uses to connect to CHAR.
-  * **SET_CHAR_PUBLIC_IP**. Public IP of CHAR server.
-  * **SET_MAP_PUBLIC_IP**. Public IP of MAP server.
-  * **ADD_SUBNET_MAP1**. Subnet mapping in format: net-submask:char_ip:map_ip. Check is check is if((net-submask & char_ip ) == (net-submask & servip)) => ok
-  * SET_INTERSRV_USERID. UserID for interserver communication.
-  * SET_INTERSRV_PASSWD. Password for interserver communication.
-  * SET_SERVER_NAME. DisplayName of the rAthena server.
-  * SET_MAX_CONNECT_USER. Maximun number of users allowed to connect concurrently. Default is unlimited.
-  * SET_START_ZENNY. Amount of zenny to start with. Default is 0.
-  * SET_START_POINT. Point where newly created characters will start AFTER trainning. Format: <map_name>,<x>,<y>{:<map_name>,<x>,<y>...}
-  * SET_START_POINT_PRE. Point where newly created character will start. Format: <map_name>,<x>,<y>{:<map_name>,<x>,<y>...}
-  * SET_START_POINT_DORAM. Point where a new character from Doram race will start. Format: <map_name>,<x>,<y>{:<map_name>,<x>,<y>...}
-  * SET_START_ITMES. Starting items for new characters. For auto-equip, include the position, otherwise 0. Format: <id>,<amount>,<position>{:<id>,<amount>,<position>
-  * SET_START_ITEMS_DORAM. Starting items for new character from Doram race.
-  * SET_PINCODE_ENABLED. Whatever a PINCODE only inputable by mouse is asked to the player. If we are testing bots this should be disabled.
-  * SET_ALLOWED_REGS. How many new characters registration are we going to allow per time unit.
-  * SET_TIME_ALLOWED. Amount of time in seconds for allowing characters registration"
+  * `DOWNLOAD_OVERRIDE_CONF_URL`. If defined, it will download a ZIP file with the import configuration overrides. If this is the case, no environment variables applies.
+  * `MYSQL_HOST`. Hostname of the MySQL database. Ex: calnus-beta.mysql.database.azure.com
+  * `MYSQL_DB`. Name of the MySQL database.
+  * `MYSQL_USER`. Database username for authentication.
+  * `MYSQL_PWD`. Password for authenticating with database.
+  * `MYSQL_ACCOUNTSANDCHARS`. To whatever to execute the accountsandchars.sql so GM and bot accounts get precreated in the database.
+  * `SET_CHAR_TO_LOGIN_IP`. IP that CHAR server uses to connect to LOGIN.
+  * `SET_MAP_TO_CHAR_IP`. IP that MAP server uses to connect to CHAR.
+  * `SET_CHAR_PUBLIC_IP`. Public IP of CHAR server.
+  * `SET_MAP_PUBLIC_IP`. Public IP of MAP server.
+  * `ADD_SUBNET_MAP1`. Subnet mapping in format: `net-submask:char_ip:map_ip`. Check is `if((net-submask & char_ip ) == (net-submask & servip)) => ok`
+  * `SET_INTERSRV_USERID`. UserID for interserver communication.
+  * `SET_INTERSRV_PASSWD`. Password for interserver communication.
+  * `SET_SERVER_NAME`. DisplayName of the rAthena server.
+  * `SET_MAX_CONNECT_USER`. Maximun number of users allowed to connect concurrently. Default is unlimited.
+  * `SET_START_ZENNY`. Amount of zenny to start with. Default is 0.
+  * `SET_START_POINT`. Point where newly created characters will start AFTER trainning. Format: `<map_name>,<x>,<y>{:<map_name>,<x>,<y>...}`
+  * `SET_START_POINT_PRE`. Point where newly created character will start. Format: `<map_name>,<x>,<y>{:<map_name>,<x>,<y>...}`
+  * `SET_START_POINT_DORAM`. Point where a new character from Doram race will start. Format: `<map_name>,<x>,<y>{:<map_name>,<x>,<y>...}`
+  * `SET_START_ITMES`. Starting items for new characters. For auto-equip, include the position, otherwise 0. Format: `<id>,<amount>,<position>{:<id>,<amount>,<position>`
+  * `SET_START_ITEMS_DORAM`. Starting items for new character from Doram race.
+  * `SET_PINCODE_ENABLED`. Whatever a PINCODE only inputable by mouse is asked to the player. If we are testing bots this should be disabled.
+  * `SET_ALLOWED_REGS`. How many new characters registration are we going to allow per time unit.
+  * `SET_TIME_ALLOWED`. Amount of time in seconds for allowing characters registration.
 
 ## NAT configuration
 
-rAthena is very sensitive to NAT configurations on your network and it is mandatory to place careful attention to the IP definition variables. These are: ADD_SUBNET_MAP1, SET_CHAR_PUBLIC_IP and SET_MAP_PUBLIC_IP.
+rAthena is very sensitive to NAT configurations on your network and it is mandatory to place careful attention to the IP definition variables. These are: `ADD_SUBNET_MAP1`, `SET_CHAR_PUBLIC_IP` and `SET_MAP_PUBLIC_IP`.
 
-ADD_SUBNET_MAP1 tells rAthena in which subnet mask is running. This is used to determine whatever an incoming connection is from LAN or WAN realm. It has the form "LAN netmask:char server ip:map server ip". For example, if the char server is at 10.0.0.3/8 and the map server is at 10.0.0.4/8 then this variable must be set at "255.0.0.0:10.0.0.3:10.0.0.4".
+`ADD_SUBNET_MAP1` tells rAthena in which subnet mask is running. This is used to determine whatever an incoming connection is from LAN or WAN realm. It has the form `LAN netmask:char server ip:map server ip`. For example, if the char server is at `10.0.0.3/8` and the map server is at `10.0.0.4/8` then this variable must be set at `255.0.0.0:10.0.0.3:10.0.0.4`.
 
-SET_CHAR_PUBLIC_IP and SET_MAP_PUBLIC_IP speak by themselves, you just put here their publicly accesible IP addresses.
+`SET_CHAR_PUBLIC_IP` and `SET_MAP_PUBLIC_IP` speak by themselves, you just put here their publicly accesible IP addresses.
 
 ## Usage
 If you have a readily accesible MySQL sever, then usage is straight forward:
